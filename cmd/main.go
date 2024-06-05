@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"strconv"
 	"strings"
@@ -89,7 +90,7 @@ func main() {
 	word = strings.TrimSpace(word)
 
 	fmt.Printf("\n===============================\n")
-	fmt.Println("Time between messages(ms) [default: 100]:")
+	fmt.Println("Time between messages(ms) [default: 1200]:")
 	fmt.Printf("-> ")
 
 	timeoutStr, err := reader.ReadString('\n')
@@ -99,7 +100,7 @@ func main() {
 
 	timeoutStr = strings.TrimSpace(timeoutStr)
 	if timeoutStr == "" {
-		timeoutStr = "100"
+		timeoutStr = "1200"
 	}
 
 	timeout, err := strconv.Atoi(timeoutStr)
@@ -129,6 +130,9 @@ func literkuj(word string, channel string, prefix string, suffix string, timeout
 		}
 
 		client.Say(channel, message)
-		time.Sleep(time.Millisecond * time.Duration(timeout))
+
+		// send messages in random interval
+		rand := rand.Intn(200)
+		time.Sleep(time.Millisecond * time.Duration(timeout+rand))
 	}
 }
